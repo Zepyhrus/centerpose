@@ -4,7 +4,7 @@ EXP_ID: 'coco_pose_res_50'
 DEBUG: 0
 DEBUG_THEME: 'white'
 SEED: 317
-OUTPUT_DIR: '/home/ubuntu/Workspace/centerpose/data/res50_lre2'
+OUTPUT_DIR: '/home/ubuntu/Workspace/centerpose/log/res50_lre2'
 LOG_DIR: ''
 EXPERIMENT_NAME: ''
 GPUS: [0]
