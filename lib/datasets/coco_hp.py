@@ -20,7 +20,8 @@ class COCOHP(data.Dataset):
         super(COCOHP, self).__init__()
 
         self.data_dir = os.path.join(cfg.DATA_DIR, 'coco')
-        self.img_dir = os.path.join(self.data_dir, 'images', '{}2017'.format(split))
+        # self.img_dir = os.path.join(self.data_dir, 'images', '{}2017'.format(split))
+        self.img_dir = os.path.join(self.data_dir, '{}2017'.format(split))
         if split == 'test':
             self.annot_path = os.path.join(
             self.data_dir, 'annotations', 

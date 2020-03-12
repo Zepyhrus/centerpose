@@ -36,7 +36,7 @@ class MultiPoseDataset(data.Dataset):
 
         anns = list(filter(lambda x:x['category_id'] in self._valid_ids and x['iscrowd']!= 1 , anns))
         num_objs = min(len(anns), self.max_objs)
-
+        
         img = cv2.imread(img_path)
 
         height, width = img.shape[0], img.shape[1]

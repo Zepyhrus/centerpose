@@ -1,13 +1,13 @@
 SAMPLE_METHOD: 'coco_hp'
-DATA_DIR: '/data'
+DATA_DIR: '/home/ubuntu/Workspace/centerpose/data'
 EXP_ID: 'coco_pose_res_50'
 DEBUG: 0
 DEBUG_THEME: 'white'
 SEED: 317
-OUTPUT_DIR: '/data/centerpose/res50_lre2'
+OUTPUT_DIR: '/home/ubuntu/Workspace/centerpose/data/res50_lre2'
 LOG_DIR: ''
 EXPERIMENT_NAME: ''
-GPUS: [0, 1, 2, 3]
+GPUS: [0]
 WORKERS: 8
 PRINT_FREQ: 0
 PIN_MEMORY: true
@@ -62,9 +62,9 @@ DATASET:
   DATASET: 'coco_hp'
   TRAIN_SET: 'train'
   TEST_SET: 'valid'
-  TRAIN_IMAGE_DIR: 'images/train2017'
+  TRAIN_IMAGE_DIR: '/home/ubuntu/Datasets/COCO/train2017'
   TRAIN_ANNOTATIONS: ['person_keypoints_train2017.json']
-  VAL_IMAGE_DIR: 'images/val2017'
+  VAL_IMAGE_DIR: '/home/ubuntu/Datasets/COCO/val2017'
   VAL_ANNOTATIONS: 'person_keypoints_val2017.json'
 
   # training data augmentation
@@ -85,7 +85,7 @@ DATASET:
   RANDOM_CROP: true 
   
 TRAIN:
-  DISTRIBUTE: true
+  DISTRIBUTE: false
   OPTIMIZER: 'sgd'  
   LOCAL_RANK: 0
   HIDE_DATA_TIME: false 
@@ -96,8 +96,8 @@ TRAIN:
   EPOCHS: 1000
   NUM_ITERS: -1
   LR: 7.e-3
-  BATCH_SIZE: 56
-  MASTER_BATCH_SIZE: 14
+  BATCH_SIZE: 4
+  MASTER_BATCH_SIZE: -1
 
   MOMENTUM: 0.9
   WD: 0.0001
