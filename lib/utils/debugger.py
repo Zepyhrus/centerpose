@@ -196,7 +196,10 @@ class Debugger(object):
     def show_all_imgs(self, pause=False, time=0):
         if not self.ipynb:
             for i, v in self.imgs.items():
-                cv2.imshow('{}'.format(i), v)
+                if v.shape[0] * v.shape[1] >= 720*1280:
+                    ratio = np.sqrt(720 * 1280 / v.shape[0] / v.shape[1])
+                v_show = cv2.resize(v, (int(v.shape[1]*ratio), int(v.shape[0]*ratio)))
+                cv2.imshow('{}'.format(i), v_show)
             if cv2.waitKey(0 if pause else 1) == 27:
                 import sys
                 sys.exit(0)

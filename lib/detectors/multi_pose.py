@@ -14,11 +14,13 @@ from utils.image import get_affine_transform
 from utils.post_process import multi_pose_post_process
 from .base_detector import BaseDetector
 
-try:
-  from external.nms import soft_nms_39
-except:
-  print('NMS not imported! If you need it,'
-        ' do \n cd $CenterNet_ROOT/src/lib/external \n make')
+from external.nms import soft_nms_39    # import should not be compassed by try-except
+
+# try:
+#   from external.nms import soft_nms_39
+# except:
+#   print('NMS not imported! If you need it,'
+#         ' do \n cd $CenterNet_ROOT/src/lib/external \n make')
 
 
 class MultiPoseDetector(BaseDetector):
