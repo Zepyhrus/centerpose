@@ -13,6 +13,8 @@ from utils.image import (affine_transform, color_aug, draw_dense_reg,
                          draw_msra_gaussian, draw_umich_gaussian, flip,
                          gaussian_radius, get_affine_transform)
 
+from utils.noise import random_aug
+
 
 class MultiPoseDataset(data.Dataset):
     def _coco_box_to_bbox(self, box):
@@ -38,6 +40,7 @@ class MultiPoseDataset(data.Dataset):
         num_objs = min(len(anns), self.max_objs)
         
         img = cv2.imread(img_path)
+        img = random_aug(img)       # added by sherk
 
         height, width = img.shape[0], img.shape[1]
         c = np.array([img.shape[1] / 2., img.shape[0] / 2.], dtype=np.float32)
