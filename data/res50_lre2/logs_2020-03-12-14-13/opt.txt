@@ -1,0 +1,5 @@
+==> torch version: 1.4.0
+==> cudnn version: 7603
+==> Cmd:
+['tools/train.py', '--cfg', 'experiments/res_50_512x512.yaml']
+==> Opt:
