@@ -111,7 +111,6 @@ def fill_fc_weights(layers):
         
         
 class PoseResNet(nn.Module):
-
     def __init__(self, block, layers, **kwargs):
         self.inplanes = 64
         self.deconv_with_bias = False
@@ -127,14 +126,17 @@ class PoseResNet(nn.Module):
         self.layer3 = self._make_layer(block, 256, layers[2], stride=2)
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
 
-        # used for deconv layers
+        # used for deconv layers, 3 times deconvlutions, remaining channels 256
         self.deconv_layers = self._make_deconv_layer(
             3,
             [256, 256, 256],
             [4, 4, 4],
         )                
                         
-
+    # for RS50 layer1:    BNeck, 64,     3,      1
+    # for RS50 layer2:    BNeck, 128,    4,      2
+    # for RS50 layer3:    BNeck, 256,    6,      2
+    # for RS50 layer4:    BNeck, 512,    3,      2
     def _make_layer(self, block, planes, blocks, stride=1):
         downsample = None
         if stride != 1 or self.inplanes != planes * block.expansion:
@@ -164,7 +166,8 @@ class PoseResNet(nn.Module):
             output_padding = 0
 
         return deconv_kernel, padding, output_padding
-
+    
+    # for RS50:                  3,          [256, 256, 256], [4, 4, 4]
     def _make_deconv_layer(self, num_layers, num_filters, num_kernels):
         assert num_layers == len(num_filters), \
             'ERROR: num_deconv_layers is different len(num_deconv_filters)'
@@ -173,6 +176,7 @@ class PoseResNet(nn.Module):
 
         layers = []
         for i in range(num_layers):
+            # 4,    1,       0
             kernel, padding, output_padding = \
                 self._get_deconv_cfg(num_kernels[i], i)
 
@@ -223,7 +227,7 @@ class PoseResNet(nn.Module):
                     nn.init.constant_(m.weight, 1)
                     nn.init.constant_(m.bias, 0)
                            
-            #pretrained_state_dict = torch.load(pretrained)
+            # pretrained_state_dict = torch.load(pretrained)
             url = model_urls['resnet{}'.format(num_layers)]
             pretrained_state_dict = model_zoo.load_url(url)
             print('=> loading pretrained model {}'.format(url))

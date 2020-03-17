@@ -32,9 +32,9 @@ class KeypointHead(nn.Module):
                     nn.ReLU(inplace=True),
                     nn.Conv2d(head_conv, 17, kernel_size=1, stride=1, padding=0))                                           
         self.hp_offset = nn.Sequential(
-                        nn.Conv2d(intermediate_channel, head_conv, kernel_size=3, padding=1, bias=True),
-                        nn.ReLU(inplace=True),
-                        nn.Conv2d(head_conv, 2, kernel_size=1, stride=1, padding=0))                      
+                    nn.Conv2d(intermediate_channel, head_conv, kernel_size=3, padding=1, bias=True),
+                    nn.ReLU(inplace=True),
+                    nn.Conv2d(head_conv, 2, kernel_size=1, stride=1, padding=0))                      
         self.init_weights()
                                            
     def forward(self, x):
