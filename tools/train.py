@@ -57,6 +57,7 @@ def main(cfg, local_rank):
         NotImplementedError
         
     start_epoch = 0
+    # added by sherk
     if cfg.MODEL.INIT_WEIGHTS:
        model, optimizer, start_epoch = load_model(
          model, cfg.MODEL.PRETRAINED, optimizer, cfg.TRAIN.RESUME, cfg.TRAIN.LR, cfg.TRAIN.LR_STEP)

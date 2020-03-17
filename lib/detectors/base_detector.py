@@ -92,6 +92,10 @@ class BaseDetector(object):
             pre_processed_images = image_or_path_or_tensor
             pre_processed = True
 
+        if image.shape[0]*image.shape[1] > 512*512:
+            ratio = np.sqrt(512*512 / image.shape[0] / image.shape[1])
+            image = cv2.resize(image, (int(image.shape[1]*ratio), int(image.shape[0]*ratio)))
+
         loaded_time = time.time()
         load_time += (loaded_time - start_time)
 
@@ -134,6 +138,7 @@ class BaseDetector(object):
 
         if self.cfg.DEBUG >= 1:
             self.show_results(debugger, image, results)
+            # self.show_save_results(debugger, image, results, image_or_path_or_tensor)
 
         return {'results': {1:results}, 'tot': tot_time, 'load': load_time,
                 'pre': pre_time, 'net': net_time, 'dec': dec_time,

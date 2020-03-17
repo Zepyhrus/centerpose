@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from os.path import split, join
+
 import math
 
 import cv2
@@ -147,9 +149,9 @@ class Debugger(object):
           self.imgs[img_id], (bbox[0], bbox[1]), (bbox[2], bbox[3]), c, 2)
         if show_txt:
             cv2.rectangle(self.imgs[img_id],
-                        (bbox[0], bbox[1] - cat_size[1] - 2),
-                        (bbox[0] + cat_size[0], bbox[1] - 2), c, -1)
-            cv2.putText(self.imgs[img_id], txt, (bbox[0], bbox[1] - 2), 
+                        (bbox[0], bbox[3] - cat_size[1] - 2),
+                        (bbox[0] + cat_size[0], bbox[3] - 2), c, -1)
+            cv2.putText(self.imgs[img_id], txt, (bbox[0], bbox[3] - 2), 
                       font, 0.5, (0, 0, 0), thickness=1, lineType=cv2.LINE_AA)
 
     def add_coco_hp(self, points, points_prob, img_id='default'): 
@@ -196,10 +198,8 @@ class Debugger(object):
     def show_all_imgs(self, pause=False, time=0):
         if not self.ipynb:
             for i, v in self.imgs.items():
-                if v.shape[0] * v.shape[1] >= 720*1280:
-                    ratio = np.sqrt(720 * 1280 / v.shape[0] / v.shape[1])
-                v_show = cv2.resize(v, (int(v.shape[1]*ratio), int(v.shape[0]*ratio)))
-                cv2.imshow('{}'.format(i), v_show)
+                cv2.imshow('{}'.format(i), v)
+
             if cv2.waitKey(0 if pause else 1) == 27:
                 import sys
                 sys.exit(0)
@@ -230,6 +230,9 @@ class Debugger(object):
             np.savetxt(path + '/id.txt', np.ones(1) * (idx + 1), fmt='%d')
         for i, v in self.imgs.items():
             cv2.imwrite(path + '/{}{}.png'.format(prefix, i), v)
+    
+    def save_out_img(self, img_name):
+        cv2.imwrite(join('output', split(img_name)[-1]), self.imgs['multi_pose'])
 
 kitti_class_name = [
   'p', 'v', 'b'

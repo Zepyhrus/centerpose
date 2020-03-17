@@ -72,7 +72,7 @@ def demo(cfg):
                     image_names.append(os.path.join(cfg.TEST.DEMO_FILE, file_name))
         else:
             image_names = [cfg.TEST.DEMO_FILE]
-    
+        
         for (image_name) in image_names:
             ret = detector.run(image_name)
 
@@ -80,6 +80,8 @@ def demo(cfg):
             for stat in time_stats:
                 time_str = time_str + '{} {:.3f}s |'.format(stat, ret[stat])
             print(time_str)
+
+
 if __name__ == '__main__':
     args = parse_args()
     update_config(cfg, args.cfg)
