@@ -173,6 +173,8 @@ class MultiPoseDataset(data.Dataset):
             hm = hm * 0 + 0.9999
             reg_mask *= 0
             kps_mask *= 0
+        
+        # here is how the annotations are generated
         ret = {'input': inp, 'hm': hm, 'reg_mask': reg_mask, 'ind': ind, 'wh': wh,
                'hps': kps, 'hps_mask': kps_mask}
         if self.cfg.LOSS.DENSE_HP:
