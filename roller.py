@@ -23,7 +23,7 @@ parser.add_argument('--DEBUG', type=int)
 
 args = parser.parse_args([
   '--cfg', 'experiments/res_50_512x512.yaml',
-  '--MODEL_PATH', 'models/res50_cloud_44.pth',
+  '--MODEL_PATH', 'models/res50_cloud_87.pth',
   '--DEBUG', '1'
 ])
 
@@ -41,7 +41,7 @@ detector = Detector(cfg)
 
 # load images
 # image_folder = '/home/ubuntu/Pictures/person/dense/*'
-image_folder = 'images/testpng/*.png'
+image_folder = 'images/png_img/*.png'
 images = glob(image_folder)
 # random.shuffle(images)  # shuffle images list
 

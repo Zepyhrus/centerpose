@@ -23,8 +23,9 @@ class MultiPoseDataset(data.Dataset):
         return bbox
 
     def _get_border(self, border, size):
+        # border = 128, size = 640
         i = 1
-        while size - border // i <= border // i:
+        while size <= border // i * 2:
             i *= 2
         return border // i
 
@@ -49,44 +50,49 @@ class MultiPoseDataset(data.Dataset):
 
         flipped = False
         if self.split == 'train':
-            if self.cfg.DATASET.RANDOM_CROP:
-                s = s * np.random.choice(np.arange(0.6, 1.4, 0.1))
-                w_border = self._get_border(128, img.shape[1])
-                h_border = self._get_border(128, img.shape[0])
-                c[0] = np.random.randint(low=w_border, high=img.shape[1] - w_border)
-                c[1] = np.random.randint(low=h_border, high=img.shape[0] - h_border)
-            else:
-                sf = self.cfg.DATASET.SCALE
-                cf = self.cfg.DATASET.SHIFT
-                c[0] += s * np.clip(np.random.randn()*cf, -2*cf, 2*cf)
-                c[1] += s * np.clip(np.random.randn()*cf, -2*cf, 2*cf)
-                s = s * np.clip(np.random.randn()*sf + 1, 1 - sf, 1 + sf)
-            if np.random.random() < self.cfg.DATASET.AUG_ROT:
-                rf = self.cfg.DATASET.ROTATE
-                rot = np.clip(np.random.randn()*rf, -rf*2, rf*2)
+            # do random crop here, always do random crop
+            s = s * np.random.choice(np.arange(0.6, 1.4, 0.1))
+            w_border = self._get_border(128, img.shape[1])
+            h_border = self._get_border(128, img.shape[0])
+            # select proper size for image crop
+            c[0] = np.random.randint(low=w_border, high=img.shape[1] - w_border)
+            c[1] = np.random.randint(low=h_border, high=img.shape[0] - h_border)
 
+            # donot do rotation augumentation
+            # if np.random.random() < self.cfg.DATASET.AUG_ROT:
+            #     rf = self.cfg.DATASET.ROTATE
+            #     rot = np.clip(np.random.randn()*rf, -rf*2, rf*2)
+
+            # 0.5 chance do flip
             if np.random.random() < self.cfg.DATASET.FLIP:
                 flipped = True
                 img = img[:, ::-1, :]
                 c[0] =  width - c[0] - 1
         
-
+        # generate input transform matrix
         trans_input = get_affine_transform(
           c, s, rot, [self.cfg.MODEL.INPUT_RES, self.cfg.MODEL.INPUT_RES])
+        
+        # turn input into standard input
         inp = cv2.warpAffine(img, trans_input, 
                              (self.cfg.MODEL.INPUT_RES, self.cfg.MODEL.INPUT_RES),
                              flags=cv2.INTER_LINEAR)
         inp = (inp.astype(np.float32) / 255.)
+        # do color augumentation
         if self.split == 'train' and not self.cfg.DATASET.NO_COLOR_AUG:
             color_aug(self._data_rng, inp, self._eig_val, self._eig_vec)
+        # input normalization
         inp = (inp - np.array(self.cfg.DATASET.MEAN).astype(np.float32)) / np.array(self.cfg.DATASET.STD).astype(np.float32)
         inp = inp.transpose(2, 0, 1)
 
+        # output resolution: 128 here
         output_res = self.cfg.MODEL.OUTPUT_RES
-        num_joints = self.num_joints
+        num_joints = self.num_joints    # number of joints is defined here
         trans_output_rot = get_affine_transform(c, s, rot, [output_res, output_res])
         trans_output = get_affine_transform(c, s, 0, [output_res, output_res])
         trans_seg_output = get_affine_transform(c, s, 0, [output_res, output_res])
+        
+        # initialize heatmap and other necessary output labels
         hm = np.zeros((self.num_classes, output_res, output_res), dtype=np.float32)
         hm_hp = np.zeros((num_joints, output_res, output_res), dtype=np.float32)
         dense_kps = np.zeros((num_joints, 2, output_res, output_res), 

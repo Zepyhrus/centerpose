@@ -30,7 +30,7 @@ class COCOHP(data.Dataset):
             self.annot_path = os.path.join(
             self.data_dir, 'annotations', 
             'person_keypoints_{}2017.json').format(split)
-        self.max_objs = 32  # maximum objects in the image only contains 32
+        self.max_objs = 32  # maximum objects in the image is only 32
         self._valid_ids = [1]
         self.class_name = ['__background__', 'person']        
         self._data_rng = np.random.RandomState(123)
@@ -49,7 +49,7 @@ class COCOHP(data.Dataset):
         images = self.coco.getImgIds()
         catIds = self.coco.getCatIds(self.class_name[-1])
         assert catIds == self._valid_ids
-        self.images = self.coco.getImgIds(images, catIds)
+        self.images = self.coco.getImgIds(images,catIds)
         self.num_samples = len(self.images)
 
         print('Loaded {} {} samples'.format(split, self.num_samples))
