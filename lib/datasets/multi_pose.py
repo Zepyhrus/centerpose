@@ -38,6 +38,11 @@ class MultiPoseDataset(data.Dataset):
         anns = self.coco.loadAnns(ids=ann_ids)
 
         anns = list(filter(lambda x:x['category_id'] in self._valid_ids and x['iscrowd']!= 1 , anns))
+        # TODO: 13 points
+        # for ann in anns:
+        #     ann['num_keypoints'] = 13
+        #     del ann['keypoints'][3:15]
+
         num_objs = min(len(anns), self.max_objs)
         
         img = cv2.imread(img_path)

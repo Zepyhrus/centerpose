@@ -1,3 +1,7 @@
+"""
+This script is used to modify the output size of the network
+"""
+
 import argparse as ap
 import os
 from os.path import join, split
@@ -67,12 +71,12 @@ num_iters = data_loader.__len__()
 # initialized from COCO_HP
 # points to be removed: 1, 2, 3, 4
 num_classes = 1
-num_joints = 17
+num_joints = 13
 limb = [
-  (0, 1), (0, 2), (1, 3), (3, 5), (2, 4), (4, 6), # head
-  (5, 7), (7, 9), (6, 8), (8, 10),        # arms
-  (5, 6), (5, 11), (6, 12), (11, 12),     # body
-  (12, 14), (11, 13), (14, 16), (13, 15)] # legs
+  (0, 1), (0, 2), # head
+  (1, 3), (3, 5), (2, 4), (4, 6),        # arms
+  (1, 2), (2, 8), (1, 7), (7, 8),     # body
+  (7, 9), (9, 11), (8, 10), (10, 12)] # legs
 
 data_dir = join(cfg.DATA_DIR, 'coco')
 img_dir = join(data_dir, 'train2017')
@@ -96,7 +100,7 @@ num_samples = len(images)
 
 # initialized from MultiPoseDataset
 for _ in range(100):
-  index = np.random.randint(num_samples)
+  index = 25770 # np.random.randint(num_samples)
   print(index)
 
   img_id = images[index]
@@ -105,6 +109,10 @@ for _ in range(100):
   ann_ids = self_coco.getAnnIds(imgIds=[img_id])
   anns = self_coco.loadAnns(ids=ann_ids)
   anns = list(filter(lambda x:x['category_id'] in _valid_ids and x['iscrowd']!= 1, anns))
+
+  for ann in anns:
+    ann['numkeypoints'] = 13
+    del ann['keypoints'][3:15]
 
   img = cv2.imread(img_path)
 

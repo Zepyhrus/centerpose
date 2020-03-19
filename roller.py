@@ -23,7 +23,7 @@ parser.add_argument('--DEBUG', type=int)
 
 args = parser.parse_args([
   '--cfg', 'experiments/res_50_512x512.yaml',
-  '--MODEL_PATH', 'models/res50_cloud_87.pth',
+  '--MODEL_PATH', 'models/res50_cloud_99.pth',
   '--DEBUG', '1'
 ])
 

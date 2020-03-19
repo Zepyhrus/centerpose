@@ -12,7 +12,7 @@ from pycocotools.cocoeval import COCOeval
 
 class COCOHP(data.Dataset):
     num_classes = 1
-    num_joints = 17
+    num_joints = 17 # TODO: 13 points
     flip_idx = [[1, 2], [3, 4], [5, 6], [7, 8], [9, 10], 
               [11, 12], [13, 14], [15, 16]]
               
@@ -66,7 +66,7 @@ class COCOHP(data.Dataset):
                 bbox[2] -= bbox[0]
                 bbox[3] -= bbox[1]
                 score = dets[4]
-                keypoint_prob = np.array(np.array(dets[39:56])>0.1).astype(np.int32).reshape(17,1)
+                keypoint_prob = np.array(np.array(dets[39:56])>0.1).astype(np.int32).reshape(13,1)
                 keypoints = np.array(dets[5:39], dtype=np.float32).reshape(-1, 2)
                 bbox_out  = list(map(self._to_float, bbox))
                 keypoints_pred = np.concatenate([

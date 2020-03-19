@@ -25,7 +25,7 @@ MODEL:
   NUM_CLASSES: 1
   NAME: 'res_50'
   HEADS_NAME: 'keypoint'
-  HEADS_NUM: [1, 2, 34, 2, 17, 2]
+  HEADS_NUM: [1, 2, 34, 2, 17, 2] # TODO: 13 points
   HEAD_CONV: 64
   INTERMEDIATE_CHANNEL: 256  
   DOWN_RATIO: 4
@@ -35,7 +35,7 @@ MODEL:
   INPUT_H: 512
   INPUT_W: 512
   PAD: 31
-  NUM_KEYPOINTS: 17
+  NUM_KEYPOINTS: 17 # TODO: 13 points
   TAG_PER_JOINT: true
   TARGET_TYPE: 'gaussian'
   SIGMA: 2    
